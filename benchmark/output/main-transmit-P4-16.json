@@ -1,0 +1,528 @@
+{
+  "program" : "main-transmit-P4-16.p4",
+  "__meta__" : {
+    "version" : [2, 6],
+    "compiler" : "https://github.com/p4lang/p4c"
+  },
+  "header_types" : [
+    {
+      "name" : "ethernet_t",
+      "id" : 1,
+      "fields" : [
+        ["dstAddr", 48, false],
+        ["srcAddr", 48, false],
+        ["etherType", 16, false]
+      ]
+    },
+    {
+      "name" : "header_0_t",
+      "id" : 2,
+      "fields" : [
+        ["field_0", 16, false]
+      ]
+    },
+    {
+      "name" : "header_1_t",
+      "id" : 3,
+      "fields" : [
+        ["field_0", 16, false]
+      ]
+    },
+    {
+      "name" : "header_2_t",
+      "id" : 4,
+      "fields" : [
+        ["field_0", 16, false]
+      ]
+    },
+    {
+      "name" : "header_3_t",
+      "id" : 5,
+      "fields" : [
+        ["field_0", 16, false]
+      ]
+    },
+    {
+      "name" : "header_4_t",
+      "id" : 6,
+      "fields" : [
+        ["field_0", 16, false]
+      ]
+    },
+    {
+      "name" : "ptp_t",
+      "id" : 7,
+      "fields" : [
+        ["transportSpecific", 4, false],
+        ["messageType", 4, false],
+        ["reserved", 4, false],
+        ["versionPTP", 4, false],
+        ["messageLength", 16, false],
+        ["domainNumber", 8, false],
+        ["reserved2", 8, false],
+        ["flags", 16, false],
+        ["correction", 64, false],
+        ["reserved3", 32, false],
+        ["sourcePortIdentity", 80, false],
+        ["sequenceId", 16, false],
+        ["PTPcontrol", 8, false],
+        ["logMessagePeriod", 8, false],
+        ["originTimestamp", 80, false]
+      ]
+    },
+    {
+      "name" : "scalars",
+      "id" : 0,
+      "fields" : []
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 8,
+      "fields" : [
+        ["ingress_port", 9, false],
+        ["egress_spec", 9, false],
+        ["egress_port", 9, false],
+        ["clone_spec", 32, false],
+        ["instance_type", 32, false],
+        ["drop", 1, false],
+        ["recirculate_port", 16, false],
+        ["packet_length", 32, false],
+        ["_padding", 4, false]
+      ]
+    }
+  ],
+  "headers" : [
+    {
+      "name" : "ethernet",
+      "id" : 0,
+      "header_type" : "ethernet_t",
+      "metadata" : false
+    },
+    {
+      "name" : "header_0",
+      "id" : 1,
+      "header_type" : "header_0_t",
+      "metadata" : false
+    },
+    {
+      "name" : "header_1",
+      "id" : 2,
+      "header_type" : "header_1_t",
+      "metadata" : false
+    },
+    {
+      "name" : "header_2",
+      "id" : 3,
+      "header_type" : "header_2_t",
+      "metadata" : false
+    },
+    {
+      "name" : "header_3",
+      "id" : 4,
+      "header_type" : "header_3_t",
+      "metadata" : false
+    },
+    {
+      "name" : "header_4",
+      "id" : 5,
+      "header_type" : "header_4_t",
+      "metadata" : false
+    },
+    {
+      "name" : "ptp",
+      "id" : 6,
+      "header_type" : "ptp_t",
+      "metadata" : false
+    },
+    {
+      "name" : "scalars",
+      "id" : 7,
+      "header_type" : "scalars",
+      "metadata" : true,
+      "pi_omit" : true
+    },
+    {
+      "name" : "standard_metadata",
+      "id" : 8,
+      "header_type" : "standard_metadata",
+      "metadata" : true
+    }
+  ],
+  "header_stacks" : [],
+  "field_lists" : [],
+  "errors" : [
+    ["ParserTimeout", 7],
+    ["HeaderTooShort", 6],
+    ["OverwritingHeader", 5],
+    ["StackOutOfBounds", 4],
+    ["NoMatch", 3],
+    ["PacketTooShort", 2],
+    ["NoError", 1]
+  ],
+  "enums" : [],
+  "parsers" : [
+    {
+      "name" : "parser",
+      "id" : 0,
+      "init_state" : "start",
+      "parse_states" : [
+        {
+          "name" : "parse_ethernet",
+          "id" : 0,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "ethernet"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "0x88f7",
+              "mask" : null,
+              "next_state" : "parse_ptp"
+            },
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["ethernet", "etherType"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_header_0",
+          "id" : 1,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "header_0"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "0x0000",
+              "mask" : null,
+              "next_state" : null
+            },
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : "parse_header_1"
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["header_0", "field_0"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_header_1",
+          "id" : 2,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "header_1"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "0x0000",
+              "mask" : null,
+              "next_state" : null
+            },
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : "parse_header_2"
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["header_1", "field_0"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_header_2",
+          "id" : 3,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "header_2"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "0x0000",
+              "mask" : null,
+              "next_state" : null
+            },
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : "parse_header_3"
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["header_2", "field_0"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_header_3",
+          "id" : 4,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "header_3"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "0x0000",
+              "mask" : null,
+              "next_state" : null
+            },
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : "parse_header_4"
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["header_3", "field_0"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_header_4",
+          "id" : 5,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "header_4"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["header_4", "field_0"]
+            }
+          ]
+        },
+        {
+          "name" : "parse_ptp",
+          "id" : 6,
+          "parser_ops" : [
+            {
+              "parameters" : [
+                {
+                  "type" : "regular",
+                  "value" : "ptp"
+                }
+              ],
+              "op" : "extract"
+            }
+          ],
+          "transitions" : [
+            {
+              "value" : "0x01",
+              "mask" : null,
+              "next_state" : "parse_header_0"
+            },
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : null
+            }
+          ],
+          "transition_key" : [
+            {
+              "type" : "field",
+              "value" : ["ptp", "reserved2"]
+            }
+          ]
+        },
+        {
+          "name" : "start",
+          "id" : 7,
+          "parser_ops" : [],
+          "transitions" : [
+            {
+              "value" : "default",
+              "mask" : null,
+              "next_state" : "parse_ethernet"
+            }
+          ],
+          "transition_key" : []
+        }
+      ]
+    }
+  ],
+  "deparsers" : [
+    {
+      "name" : "deparser",
+      "id" : 0,
+      "order" : ["ethernet", "ptp", "header_0", "header_1", "header_2", "header_3", "header_4"]
+    }
+  ],
+  "meter_arrays" : [],
+  "counter_arrays" : [],
+  "register_arrays" : [],
+  "calculations" : [],
+  "learn_lists" : [],
+  "actions" : [
+    {
+      "name" : "_drop",
+      "id" : 0,
+      "runtime_data" : [],
+      "primitives" : [
+        {
+          "op" : "drop",
+          "parameters" : []
+        }
+      ]
+    },
+    {
+      "name" : "forward",
+      "id" : 1,
+      "runtime_data" : [
+        {
+          "name" : "port",
+          "bitwidth" : 9
+        }
+      ],
+      "primitives" : [
+        {
+          "op" : "modify_field",
+          "parameters" : [
+            {
+              "type" : "field",
+              "value" : ["standard_metadata", "egress_spec"]
+            },
+            {
+              "type" : "runtime_data",
+              "value" : 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name" : "NoAction",
+      "id" : 2,
+      "runtime_data" : [],
+      "primitives" : []
+    }
+  ],
+  "pipelines" : [
+    {
+      "name" : "ingress",
+      "id" : 0,
+      "init_table" : "forward_table",
+      "tables" : [
+        {
+          "name" : "forward_table",
+          "id" : 0,
+          "key" : [
+            {
+              "match_type" : "exact",
+              "target" : ["ethernet", "dstAddr"],
+              "mask" : null
+            }
+          ],
+          "match_type" : "exact",
+          "type" : "simple",
+          "max_size" : 4,
+          "with_counters" : false,
+          "support_timeout" : false,
+          "direct_meters" : null,
+          "action_ids" : [1, 0, 2],
+          "actions" : ["forward", "_drop", "NoAction"],
+          "base_default_next" : null,
+          "next_tables" : {
+            "forward" : null,
+            "_drop" : null,
+            "NoAction" : null
+          },
+          "default_entry" : {
+            "action_id" : 2,
+            "action_const" : false,
+            "action_data" : [],
+            "action_entry_const" : false
+          }
+        }
+      ],
+      "action_profiles" : [],
+      "conditionals" : []
+    },
+    {
+      "name" : "egress",
+      "id" : 1,
+      "init_table" : null,
+      "tables" : [],
+      "action_profiles" : [],
+      "conditionals" : []
+    }
+  ],
+  "checksums" : [],
+  "force_arith" : [
+    ["standard_metadata", "ingress_port"],
+    ["standard_metadata", "egress_spec"],
+    ["standard_metadata", "egress_port"],
+    ["standard_metadata", "clone_spec"],
+    ["standard_metadata", "instance_type"],
+    ["standard_metadata", "drop"],
+    ["standard_metadata", "recirculate_port"],
+    ["standard_metadata", "packet_length"]
+  ]
+}
