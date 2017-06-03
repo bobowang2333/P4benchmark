@@ -1,0 +1,7 @@
+Number of packets: 100000
+Offered load:  1300000
+Thrift port was not specified, will use 9090
+Calling target program-options parser
+Adding interface veth0 as port 0
+Adding interface veth2 as port 1
+Adding interface veth4 as port 2

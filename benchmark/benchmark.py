@@ -8,13 +8,17 @@ import argparse
 
 class P4Benchmark(object):
     def __init__(self, parent_dir, directory, offer_load):
+	assert os.environ.get('BMV2_PATH')
+	assert os.environ.get('P4C_BM_SCRIPT')
         assert os.environ.get('P4BENCHMARK_ROOT')
         assert os.environ.get('PYTHONPATH')
         pypath = os.environ.get('PYTHONPATH')
         p4bench = os.environ.get('P4BENCHMARK_ROOT')
-        bmv2 = os.path.join(p4bench, 'behavioral-model')
-        self.p4c = os.path.join(p4bench, 'p4c-bm/p4c_bm/__main__.py')
-        self.switch_path = os.path.join(bmv2, 'targets/simple_switch/simple_switch')
+        #bmv2 = os.path.join(p4bench, 'behavioral-model')
+        bmv2 = os.environ.get('BMV2_PATH')
+	#self.p4c = os.path.join(p4bench, 'p4c-bm/p4c_bm/__main__.py')
+        self.p4c = os.environ.get('P4C_BM_SCRIPT')
+	self.switch_path = os.path.join(bmv2, 'targets/simple_switch/simple_switch')
         self.cli_path = os.path.join(bmv2, 'tools/runtime_CLI.py')
         self.pktgen = os.path.join(p4bench, 'pktgen/build/p4benchmark')
         self.sendb2b = os.path.join(p4bench, 'pktgen/build/sendb2b')
@@ -104,7 +108,7 @@ class P4Benchmark(object):
         self.add_rules(json_path, commands, 3)
 
     def run_packet_generator(self):
-        cmd = 'sudo {0} -p {1} -i veth4 -c {2} -t {3} -f "udp"'.format(self.pktgen,
+        cmd = 'sudo {0} -p {1} -i veth4 -c {2} -t {3}'.format(self.pktgen,
             'output/test.pcap', self.nb_packets, self.offer_load)
         print cmd
         args = shlex.split(cmd)

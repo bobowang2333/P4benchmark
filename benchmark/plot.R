@@ -1,4 +1,4 @@
-#!/usr/bin/Rscript
+#!/home/jingbo/P4/R-latest/bin/Rscript
 
 list.of.packages <- c("ggplot2", "tools", "reshape2", "scales", "Rmisc", "plyr")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]

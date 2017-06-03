@@ -1,0 +1,4 @@
+parsing successful
+semantic checking successful
+Header type standard_metadata_t not byte-aligned, adding padding
+Generating json output to /home/jingbo/P4/p4benchmark/benchmark/output/main.json

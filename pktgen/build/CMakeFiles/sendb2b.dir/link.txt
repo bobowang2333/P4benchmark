@@ -1,0 +1,1 @@
+/usr/bin/cc      CMakeFiles/sendb2b.dir/src/capture.c.o CMakeFiles/sendb2b.dir/src/parser.c.o CMakeFiles/sendb2b.dir/src/close_loop.c.o  -o sendb2b -rdynamic -lpcap -lpthread 

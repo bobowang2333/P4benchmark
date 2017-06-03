@@ -1,0 +1,1 @@
+/usr/bin/cc      CMakeFiles/p4benchmark.dir/src/capture.c.o CMakeFiles/p4benchmark.dir/src/parser.c.o CMakeFiles/p4benchmark.dir/src/main.c.o  -o p4benchmark -rdynamic -lpcap -lpthread 
